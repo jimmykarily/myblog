@@ -1,7 +1,7 @@
 ---
 layout: default
 title:  "Going live!"
-date:   2019-01-07 20:07:12 +0200
+date:   2019-01-11 20:07:12 +0200
 #categories: jekyll update
 image: /images/lake_reflections.jpg
 tags: [general]
