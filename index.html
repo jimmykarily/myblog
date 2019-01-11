@@ -5,17 +5,18 @@
 layout: default
 ---
 
-<h1 class="my-4">Posts
-  <small>Secondary Text</small>
-</h1>
+<h1 class="my-4">Posts index</h1>
 
 {% for post in paginator.posts %}
   <div class="card mb-4">
-    <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
+    {% if post.image %}
+      <img class="card-img-top" src="{{ post.image | prepend: site.baseurl }}" alt="{{ post.title }}">
+    {% endif %}
     <div class="card-body">
       <h2 class="card-title">{{ post.title }}</h2>
-      <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
+      <p class="card-text">{{ post.content | strip_html | truncatewords:75 }}</p>
       <a href="{{ post.url }}" class="btn btn-primary">Read More &rarr;</a>
+
     </div>
     <div class="card-footer text-muted">
       Posted on {{ post.date }}
