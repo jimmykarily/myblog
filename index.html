@@ -19,7 +19,7 @@ layout: default
 
     </div>
     <div class="card-footer text-muted">
-      Posted on {{ post.date }}
+      Posted on {{ post.date | date_to_long_string }}
     </div>
   </div>
 {% endfor %}

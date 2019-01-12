@@ -5,6 +5,8 @@ date:   2019-01-11 20:07:12 +0200
 #categories: jekyll update
 image: /images/lake_reflections.jpg
 tags: [general]
+author: Dimitris Karakasilis
+description: First post of my new blog
 ---
 
 [![LakeReflections](/images/lake_reflections.jpg)](https://500px.com/photo/248954203/lake-reflections-by-nicoletta-bendevi)

@@ -16,7 +16,7 @@
 title: Dimitris Karakasilis
 email: jimmykarily@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  This is where Dimitris Karakasilis writes mostly about software but sometimes other stuff.
+  Dimitris Karakasilis' personal blog.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  jimmykarily
