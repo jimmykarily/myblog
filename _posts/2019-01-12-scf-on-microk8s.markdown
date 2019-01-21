@@ -218,10 +218,19 @@ secrets:
   UAA_ADMIN_CLIENT_SECRET: password
 ```
 
+Deploy uaa:
+
+```bash
+$ helm install suse/uaa \
+--name susecf-uaa \
+--namespace uaa \
+--values scf-config-values.yaml
+```
+
 Wait until UAA pods become ready:
 
 ```bash
-$ wait kubectl get pods -n uaa
+$ watch kubectl get pods -n uaa
 ```
 
 Install scf:
@@ -243,7 +252,7 @@ $ helm install suse/cf \
 Wait until all pods become ready:
 
 ```bash
-$ wait kubectl get pods -n scf
+$ watch kubectl get pods -n scf
 ```
 
 Your ClouFoundry cluster is now ready to be used. Setup the api (replace `192.168.1.152` with the correct ip as before):
