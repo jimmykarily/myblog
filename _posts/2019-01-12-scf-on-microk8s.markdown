@@ -273,3 +273,4 @@ Enjoy!
 ## Conclusion
 
 - You can run applications and services locally (e.g. concourse)
+- https://github.com/kubernetes-sigs/kind (https://www.youtube.com/watch?v=okw8brTi6MY)
