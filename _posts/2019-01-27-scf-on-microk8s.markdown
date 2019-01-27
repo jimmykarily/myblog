@@ -1,24 +1,23 @@
 ---
 layout: default
-title: "SUSE CloudFoundry on microk8s"
-description: A guide on how to setup scf on microk8s for development or demo
-date:   2019-01-12
+title: "SUSE CloudFoundry on MicroK8s"
+description: A guide on how to setup scf on MicroK8s for development or demo
+date:   2019-01-27
 #image: /images/lake_reflections.jpg
-tags: [microk8s, cloudfoundry, scf, suse, kubernetes]
+tags: [MicroK8s, cloudfoundry, scf, suse, kubernetes]
 ---
 
 # SUSE Cloud Application Platform (CAP) on Microk8s
 
 Unless you've been living under a rock, you probably know what [kubernetes](https://kubernetes.io/) is. If you have been living under a rock (which is nothing to be ashamed of), kubernetes is a production-grade container orchestrator or in simple words a way to use containers in production to deploy applications and services.
 
-There are a number of ways to try kubernetes locally (check [this link](https://kubernetes.io/docs/setup/pick-right-solution/#local-machine-solutions)). A couple of weeks ago I decided to give microk8s a try. The idea of microk8s was very appealing to me because they use your machine's resources without you having to decide on a VM size beforehand. I remember there was a project that run Kubernetes containerized but it was abandoned in favor of minikube (can't find a link to that original project anymore, sorry). Microk8s is the closest I could get to that solution.
-(Bonus link: [microk8s - minikube comparison by Thomas Pliakas](https://codefresh.io/kubernetes-tutorial/local-kubernetes-linux-minikube-vs-microk8s/))
+There are a number of ways to try kubernetes locally (check [this link](https://kubernetes.io/docs/setup/pick-right-solution/#local-machine-solutions)). A couple of weeks ago I decided to give [MicroK8s](https://microk8s.io/) a try. The idea of MicroK8s was very appealing to me because they use your machine's resources without you having to decide on a VM size beforehand. There is a nice comparison of MicroK8s and Minikube by Thomas Pliakas if you are interested: [link](https://codefresh.io/kubernetes-tutorial/local-kubernetes-linux-minikube-vs-microk8s/).
 
-My goal was to run [SUSE Cloud Application Platform](https://github.com/suse/scf) on top of MicroK8S and see if I could use it for local development on [scf](https://github.com/SUSE/scf) or demonstration reasons. Everything worked fine in the end and below you can find the steps I followed to achieve that.
+My goal was to run two of the main components of [SUSE Cloud Application Platform](https://www.suse.com/products/cloud-application-platform/)  ([scf](https://github.com/suse/scf) and UAA) on top of MicroK8s and see if I could use it for local development or quick demos. Everything worked fine in the end and below you can find the steps I followed to achieve that.
 
-## Set up microk8s
+## Set up MicroK8s
 
-microk8s run on [Snap](https://snapcraft.io/). To install Snap on openSUSE Tumbleweed I followed the instructions here: https://forum.snapcraft.io/t/installing-snap-on-opensuse/8375
+MicroK8s run on [Snap](https://snapcraft.io/). To install Snap on openSUSE Tumbleweed I followed the instructions here: [https://forum.snapcraft.io/t/installing-snap-on-opensuse/8375](https://forum.snapcraft.io/t/installing-snap-on-opensuse/8375)
 
 - Start snapd:
 
@@ -34,13 +33,13 @@ $ # sudo systemctl enable snapd
 $ export PATH=$PATH:/snap/bin
 ```
 
-- Install microk8s:
+- Install MicroK8s:
 
 ```bash
 $ snap install microk8s --classic
 ```
 
-- Start microk8s:
+- Start MicroK8s:
 
 ```bash
 $ microk8s.start
@@ -71,9 +70,9 @@ Wait until both pods become ready (`hostpath-provisioner-*` and `kube-dns-*`). I
 $ sudo iptables -P FORWARD ACCEPT
 ```
 
-## Prepare for CAP
+## Prepare for [scf](https://github.com/suse/scf)
 
-Before we deploy SUSE Cloud Application Platform on our fresh cluster there are a couple of changes we need to make in the configuration of docker and kubelet in microk8s.
+Before we deploy scf on our fresh cluster there are a couple of changes we need to make in the configuration of docker and kubelet in MicroK8s.
 
 ### Fix ulimit in containers
 
@@ -119,7 +118,7 @@ In my system's `/etc/resolv.conf` I had this line:
 search suse.de
 ```
 
-This (by default) was inherited inside the pods resolv.conf file (See here why: [kubernetes](https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/#introduction), [microk8s](https://github.com/ubuntu/microk8s/blob/master/microk8s-resources/actions/dns.yaml#L209))
+This (by default) was inherited inside the pods resolv.conf file (See here why: [kubernetes](https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/#introduction), [MicroK8s](https://github.com/ubuntu/microk8s/blob/master/microk8s-resources/actions/dns.yaml#L209))
 
 This resulted in router-0 pod to fail to become ready (it was adding suse.de in the routing-api-0 hostname).
 To avoid this (or other similar) problem, open `/var/snap/microk8s/current/args/kubelet` and add this line in the existing options:
@@ -142,9 +141,18 @@ One more thing you need to ensure is that you have swapaccount enabled on your h
 - Update grub: `sudo grub2-mkconfig -o /boot/grub2/grub.cfg`
 - Reboot your system to apply the change
 
-## Deploy SUSE Cloud Application Platform
+## Deploy scf
 
-Our cluster is ready so we can follow [the official documentation to deploy CAP](https://www.suse.com/documentation/cloud-application-platform-1/singlehtml/book_cap_guides/book_cap_guides.html#sec.cap.helm-deploy-prod):
+We will deploy the openSUSE based version of CloudFoundry (Cloud Application Platform comes with SLE stemcell and stack). Grab the latest release from here: https://github.com/SUSE/scf/releases. In my case it was [the 2.14.5 zip file](https://github.com/SUSE/scf/releases/download/2.14.5/scf-opensuse-2.14.5+cf2.7.0.0.g6360c016.zip).
+
+Extract the zip file to your desired location:
+
+```bash
+$ mkdir tmp
+$ cd tmp
+$ wget https://github.com/SUSE/scf/releases/download/2.14.5/scf-opensuse-2.14.5+cf2.7.0.0.g6360c016.zip
+$ unzip scf-opensuse-2.14.5+cf2.7.0.0.g6360c016.zip
+```
 
 Install tiller:
 
@@ -153,13 +161,6 @@ $ helm init --upgrade
 $ watch helm version
 ```
 (wait until the tiller version appears)
-
-
-Setup the suse helm registry:
-
-```bash
-$ helm repo add suse https://kubernetes-charts.suse.com/
-```
 
 Create the scf-config-value.yaml (replace `192.168.1.152` everywhere in the file
 with the one returned by `microk8s.config | grep server`):
@@ -200,14 +201,6 @@ kube:
     persistent: "microk8s-hostpath"
     shared: "shared"
 
-  # The registry the images will be fetched from.
-  # The values below should work for
-  # a default installation from the SUSE registry.
-  registry:
-    hostname: "registry.suse.com"
-    username: ""
-    password: ""
-  organization: "cap"
   auth: none
 
 secrets:
@@ -221,7 +214,7 @@ secrets:
 Deploy uaa:
 
 ```bash
-$ helm install suse/uaa \
+$ helm install helm/uaa-opensuse \
 --name susecf-uaa \
 --namespace uaa \
 --values scf-config-values.yaml
@@ -242,7 +235,7 @@ $ SECRET=$(kubectl get pods --namespace uaa \
 $ CA_CERT="$(kubectl get secret $SECRET --namespace uaa \
 -o jsonpath="{.data['internal-ca-cert']}" | base64 --decode -)"
 
-$ helm install suse/cf \
+$ helm install helm/cf-opensuse \
 --name susecf-scf \
 --namespace scf \
 --values scf-config-values.yaml \
@@ -255,7 +248,7 @@ Wait until all pods become ready:
 $ watch kubectl get pods -n scf
 ```
 
-Your ClouFoundry cluster is now ready to be used. Setup the api (replace `192.168.1.152` with the correct ip as before):
+ClouFoundry is now ready to be used. Setup the api (replace `192.168.1.152` with the correct ip as before):
 
 ```bash
 $ cf api --skip-ssl-validation https://api.192.168.1.152.nip.io
@@ -272,5 +265,12 @@ Enjoy!
 
 ## Conclusion
 
-- You can run applications and services locally (e.g. concourse)
-- https://github.com/kubernetes-sigs/kind (https://www.youtube.com/watch?v=okw8brTi6MY)
+This experiment proved to be the easiest way to deploy scf locally so far for me. It is also quite flexible since I don't need to know how many resources I will need for my CloudFoundry applications beforehand.
+
+Although I used SUSE Cloud Application Platform components for this experiment, it can also be used to deploy any helm package out there. For example, I successfully deployed [Concourse CI](https://github.com/helm/charts/tree/master/stable/concourse) on the same cluster. Having everything running on the same machine drove my SSD to its limits though.
+
+If you were looking for docker-compose files to deploy containerized applications locally, with microk8s you can now look for a helm chart as an alternative.
+
+While finishing this post, I watched the [recording of an interesting TGI Kubernetes episode](https://www.youtube.com/watch?v=okw8brTi6MY) where ["kind"](https://github.com/kubernetes-sigs/kind) ([K]ubernetes [IN] [D]ocker) was presented. I think that will be the next local kubernetes solution I will try.
+
+Stay tuned...
