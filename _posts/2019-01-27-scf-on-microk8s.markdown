@@ -1,10 +1,9 @@
 ---
 layout: default
-title: "SUSE CloudFoundry on MicroK8s"
-description: A guide on how to setup scf on MicroK8s for development or demo
+title: "SUSE Cloud Application Platform on MicroK8s"
+description: A guide on how to setup SUSE Cloud Application Platform on MicroK8s for development or demo
 date:   2019-01-27
-#image: /images/lake_reflections.jpg
-tags: [MicroK8s, cloudfoundry, scf, suse, kubernetes]
+tags: [microk8s, cloudfoundry, scf, suse, kubernetes]
 ---
 
 # SUSE Cloud Application Platform (CAP) on Microk8s
