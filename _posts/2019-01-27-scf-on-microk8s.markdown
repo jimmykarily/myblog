@@ -132,6 +132,12 @@ Apply the change with:
 $ sudo systemctl restart snap.microk8s.daemon-kubelet.service
 ```
 
+### Allow privileged containers
+
+Some of the pods will try to run containers in privileged mode and you need to allow this on your cluster.
+
+Add `--allow-privileged=true` in `/var/snap/microk8s/current/args/kubelet` and `/var/snap/microk8s/current/args/kube-apiserver` and restart microk8s (`microk8s.stop` and `microk8s.start`)
+
 ### Enable swap accounting
 
 One more thing you need to ensure is that you have swapaccount enabled on your host system (since this is the kernel that is being used by all the containers). All you need to do is to add `swapaccount=1` in your kernel options. Here is how I did that but you should use whatever works for your system:
