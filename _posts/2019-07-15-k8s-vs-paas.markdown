@@ -1,0 +1,99 @@
+---
+layout: default
+title: "Kubernetes VS PaaS"
+description: Can a developer skip PaaS and consume raw Kubernetes?
+image: /images/raw_vegetables.jpg
+date:   2019-07-15
+tags: [Kubernetes, PaaS]
+---
+
+![Raw Vegetables](/images/raw_vegetables.jpg)
+
+# Kubernetes VS PaaS
+_{{ page.description }}_
+
+If you asked me 3 years ago, I would probably define the professional part of myself as a "Rails developer". Back then, most of my new projects started with a proof of concept deployed on a free Heroku account. The reason is simple, that was the fastest way to get my Ruby application live. At the same time it was the cheapest (free right?) so that was no-brainer.
+
+The last 2.5 years, my work has been mostly on CloudFoundry and Kubernetes. CloudFoundry is an Open Source PaaS solution and Kubernetes is a Container orchestration platform. I work on a project that combines these two ([SUSE CloudFoundry](https://github.com/suse/scf) runs CloudFoundry on top of Kubernetes). There is an argument I've heard more than once regarding running a PaaS on top of Kubernetes and that is: "Why deploy CloudFoundry on top of Kubernetes and not use Kubernetes directly?". Maybe it's my science studies, maybe it's Myth Busters, but I had to test this theory. Thankfully, 2 times a year we get a week to hack on anything we want at SUSE ([Check it out](https://hackweek.suse.com/)) so I got the time I needed a couple of weeks ago.
+
+## Scope of the experiment
+
+You can only do so much in a week so I had to limit the scope of this experiment. The question to be answered was simply "As an application developer, is it realistic to skip PaaS and live with just Kubernetes?".
+
+To be fair, the initial effort to set things up shouldn't affect the final verdict very much because that depends on your starting point, prior knowledge and other factors. What is more interesting is how the everyday life of a developer that uses Kubernetes compares to that of a developer that uses a Platform like CloudFoundry or Heroku. And I mean production stuff (TLS, DNS, Backups, HA etc). But given most of the time was spent on the initial setup, I can't guarantee fair judgment.
+
+## The experiment
+
+A week was not enough to setup everything I needed for a production deployment with Kubernetes but that might also be because I also spent some time setting up my development environment with a local cluster (more on that later). But here is what I tried.
+
+### CI
+
+This is the first thing I had to setup. With CloudFoundry (I will use CloudFoundry as the representative of PaaS for this experiment), all you need is your code and the `cf` cli. The moment you push your code with `cf push`, the platform finds the dependencies your application needs, the language you use and builds a container image for your application. It then runs it using it's own container orchestrator (which [can be Kubernetes](https://www.cloudfoundry.org/project-eirini/) by the way).
+
+In the raw Kubernetes world, all you have is the orchestrator. You need something to build your application image. There are some options that promise an experience similar to that of PaaS which you can use in Kubernetes but none of them worked smoothly for me. Here they are:
+
+- Cloud Native buildpacks ([https://buildpacks.io/](https://buildpacks.io/))
+
+  Although this project is very promising and at some point these buildpacks will also be used in CloudFoundry itself, there is no Ruby buildpack yet and the application I chose to work on was in Ruby. Also, I would need a CI to run the `pack` tool anyway.
+
+- Knative build component ([https://github.com/knative/build](https://github.com/knative/build))
+
+  I followed the guides and installed Knative on my cluster. I tried to use the [kaniko build template](https://github.com/knative/build-templates/tree/master/kaniko) as [suggested in the docs](https://knative.dev/docs/build/build-templates/#example-template) but after spending a day I couldn't get an image to build. Also, the knative build README on GitHub currently shows a NOTE about a deprecation proposal so there is a possibility that this process will change in the future. For these reasons I decided to skip this option as well.
+
+  In the end, I decided to build a [simple pipeline in Concourse](https://github.com/jimmykarily/kubaas/tree/master/examples/concourse_pipeline) that builds the application image when I commit to the master branch. Every project needs a CI system anyway so having a pipeline for the image was a small price to pay.
+
+### Database
+
+When using a PaaS, your operator has setup a marketplace of services which you can use and bind to your app. You might get something similar from your cloud provider which you can use in your Kubernetes cluster. I opted for a Postgres database deployed in the same cluster as my application. I set this up [as requirement of my helm chart](https://github.com/jimmykarily/kubaas/blob/master/examples/app-helm/requirements.yaml#L2). This ofcourse means I will have to take care of replication, backups and everything. Given the limited time for this experiment I can only guess how much complexity this adds but since there are other options (managed cloud database) this shouldn't count against the final score for raw Kubernetes.
+
+### TLS
+
+Production ready means the web application should be served over HTTPS with a valid certificate signed by a known authority. Setting this up in Kubernetes should be very simple with the use of [cert-manager](https://docs.cert-manager.io/en/latest/) which will take care of creating certificates for you signed by [various issuers](https://docs.cert-manager.io/en/latest/tasks/issuers/index.html#supported-issuer-types) (letsencrypt included). If you use ingress it can even [do that automatically](https://docs.cert-manager.io/en/latest/tasks/issuing-certificates/ingress-shim.html) for your ingress resources using annotations.
+
+Theory once again proved to be quite different from reality. My "production" cluster of choice was [GKE](https://cloud.google.com/kubernetes-engine/). It took me a while to find out [the reason](https://github.com/jetstack/cert-manager/issues/1666) I couldn't get automated creation of certificates for my nginx ingress resources. Workarounds exist but once again setting this up cost me time. Depending on the PaaS of your choice your mileage might vary there too so it's hard to compare.
+
+### Things skipped
+
+A production setup could, and probably should, take care of more than the above requirements. Some examples:
+
+- Zero downtime deployments (blue - green deployments maybe?)
+- Load balancing and HA
+- Database and application deployment rollbacks
+- Automatic scaling up and down
+- Monitoring and notifications when weird things happen
+- other
+
+## Bonus material - Development environment
+
+If you are deploying on Kubernetes, why not use Kubernetes for development too? There are many options when it comes to local clusters ([minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/), [microk8s](https://microk8s.io/), [kind](https://github.com/kubernetes-sigs/kind) and others). I encourage you to give them a try but my choice for this experiment was `kind` because it doesn't have many dependencies and doesn't run in a virtual machine (it's docker in docker). You can find a `Make` target [in my repo](https://github.com/jimmykarily/kubaas/blob/master/Makefile#L4) that will spin up a local cluster for you in a temporary directory. I also added [an example Concourse pipeline](https://github.com/jimmykarily/kubaas/tree/master/examples/concourse_pipeline) and an example application [helm chart](https://github.com/jimmykarily/kubaas/tree/master/examples/app-helm) which you can use as a guide for your apps.
+
+For my experiment I even run Concourse on my local cluster using the [provided helm chart](https://github.com/helm/charts/tree/master/stable/concourse). Check the [README](https://github.com/jimmykarily/kubaas#automation---ci) for more information.
+
+## The verdict
+
+The perfect production setup doesn't exist except in the tales we tell over beers. All we can hope for is something good enough for the use case at hand. That said, making your production environment more stable, bullet proof and all the good things is an art and a never ending process. The question was "Can a developer skip PaaS and consume raw Kubernetes?" and I tried to gather enough data to support an answer to that question.
+
+With many things still unclear my verdict is that, yes you *can* use Kubernetes directly and there are good reasons to do so. Namely:
+
+- No additional layers - less things to debug (only applies when your PaaS is not running on bare metal).
+- Multiple public offerings to choose from. No vendor lock-in. Moving to a different Kubernetes provider is easier than moving to a different PaaS.
+- Expect it to become cheaper as more vendors enter the market.
+- More flexible (you can tweak everything in the infrastructure if you so desire).
+- Big community. Expect tools and solutions to appear that will make your life easier as a developer in the future.
+
+So, you *can* use Kubernetes as a developer but you probably shouldn't because:
+
+- Kubernetes was not designed with developers as the target audience. There seems to be [a shift of focus](https://github.com/google/kf) but it's still too early to say that Kubernetes UX is on par with PaaS.
+- You need to know a lot about Kubernetes before you get an app running for production.
+- Needs additional tools to have a proper pipeline to deploy apps (e.g. CI, KNative etc)
+- Every workflow needs to be implemented by the developer. Other platforms are more opinionated and have that shorted out for you (E.g. deploy to staging, rollback deployments with/without migrations, etc)
+
+If you were hoping for a yes or no answer you might be disappointed but this post only meant to be an opinion, not a global truth. I hope you find this useful and that you give it a try too. My plan is to continue on this experiment and I might come up with more information through a new post.
+
+Until then, stay happy and keep hacking.
+
+
+## Links
+
+- [The repo of the experiment](https://github.com/jimmykarily/kubaas)
+- [Recommended blog post from Troy Topnik on the same subject](https://www.suse.com/c/the-holy-grail-of-paas-on-kubernetes/)
