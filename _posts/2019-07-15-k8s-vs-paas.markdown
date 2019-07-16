@@ -86,7 +86,7 @@ So, you *can* use Kubernetes as a developer but you probably shouldn't because:
 - Kubernetes was not designed with developers as the target audience. There seems to be [a shift of focus](https://github.com/google/kf) but it's still too early to say that Kubernetes UX is on par with PaaS.
 - You need to know a lot about Kubernetes before you get an app running for production.
 - Needs additional tools to have a proper pipeline to deploy apps (e.g. CI, KNative etc)
-- Every workflow needs to be implemented by the developer. Other platforms are more opinionated and have that shorted out for you (E.g. deploy to staging, rollback deployments with/without migrations, etc)
+- Every workflow needs to be implemented by the developer. Other platforms are more opinionated and have that sorted out for you (E.g. deploy to staging, rollback deployments with/without migrations, etc)
 
 If you were hoping for a yes or no answer you might be disappointed but this post only meant to be an opinion, not a global truth. I hope you find this useful and that you give it a try too. My plan is to continue on this experiment and I might come up with more information through a new post.
 
