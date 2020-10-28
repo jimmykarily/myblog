@@ -23,7 +23,7 @@ function fuzzypass {
 
 While I'm waiting for my [pinephone](https://www.pine64.org/pinephone/) to arrive I started re-programming my mind for a phone without all the Android apps I'm used to (e.g. lastpass). A tool like fzf could be used for a number of solutions (see the project's README for a couple of examples) but I would rather not start a terminal emulator every time I need to search for something. Although I don't have a pine phone to give it a try yet, I went on and created a gui drop-in replacement for fzf anyway.
 
-I initially considered extending fzf and opening a PR to add an optional gui to it but looking at the code, that proved to be harder than using a library that provides fzf to implement the tool from scratch. So I did exactly that. Thankfully [sahilm/fuzzy](https://github.com/sahilm/fuzzy) provides a nice interface and did exactly what I needed. The only thing I needed to do was to wire it with a gtk gui.
+I initially considered extending fzf and opening a PR to add an optional gui to it but looking at the code, that proved to be harder than using a library that provides fuzzy search functionality to implement the tool from scratch. So I did exactly that. Thankfully [sahilm/fuzzy](https://github.com/sahilm/fuzzy) provides a nice interface and did the job prefectly. The only thing I needed to do was to wire it with a gtk gui.
 
 [Version 0.3 is out](https://github.com/jimmykarily/fuzzygui/releases/tag/0.3), so give it a try and let me know what you think. I'm considering adding some command line options to control the size of the window and number of listed results in the future releases so stay tuned!
 
