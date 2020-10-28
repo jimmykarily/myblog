@@ -25,7 +25,7 @@ While I'm waiting for my [pinephone](https://www.pine64.org/pinephone/) to arriv
 
 I initially considered extending fzf and opening a PR to add an optional gui to it but looking at the code, that proved to be harder than using a library that provides fuzzy search functionality to implement the tool from scratch. So I did exactly that. Thankfully [sahilm/fuzzy](https://github.com/sahilm/fuzzy) provides a nice interface and did the job prefectly. The only thing I needed to do was to wire it with a gtk gui.
 
-[Version 0.3 is out](https://github.com/jimmykarily/fuzzygui/releases/tag/0.3), so give it a try and let me know what you think. I'm considering adding some command line options to control the size of the window and number of listed results in the future releases so stay tuned!
+[Version 0.3 is out](https://github.com/jimmykarily/fuzzygui/releases/tag/0.3), so give it a try and let me know what you think. I'm considering adding some command line options to control the size of the window and the number of listed results in the future releases so stay tuned!
 
 
 ## Links
