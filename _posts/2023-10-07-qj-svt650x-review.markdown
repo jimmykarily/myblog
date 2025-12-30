@@ -5,6 +5,7 @@ description: Μικρή βόλτα, εντυπώσεις και συμπεράσ
 date:   2023-10-07
 tags: [moto, gr]
 language: el
+hidden: true
 ---
 
 ![svt650x](/images/svt650x-1.jpg)
