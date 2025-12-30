@@ -4,6 +4,7 @@ title: "Test Ride QJ SVT650X"
 description: Μια βόλτα στην Καρκαλού για δοκιμή
 date:   2023-10-07
 tags: [moto, gr]
+language: el
 ---
 
 # Test Ride - QJ SVT650X
