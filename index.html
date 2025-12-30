@@ -5,10 +5,11 @@
 layout: default
 ---
 
-<h1 class="my-4">Posts</h1>
-
 {% for post in paginator.posts %}
-  <div class="card mb-4">
+  <div class="card mb-4" style="position: relative;">
+    {% if post.language == 'gr' or post.language == 'el' %}
+      <span style="position: absolute; bottom: 10px; right: 10px; font-size: 1.5rem;">🇬🇷</span>
+    {% endif %}
     {% if post.image %}
       <img class="card-img-top" src="{{ post.image | prepend: site.baseurl }}" alt="{{ post.title }}">
     {% endif %}
@@ -32,11 +33,11 @@ layout: default
 <ul class="pagination justify-content-center mb-4">
   {% if paginator.previous_page %}
     <li class="page-item">
-      <a class="page-link" href="{{ paginator.previous_page_path | relative_url }}">&larr; Older</a>
+      <a class="page-link" href="{{ paginator.previous_page_path | relative_url }}">&larr; Newer</a>
     </li>
   {% else %}
     <li class="page-item disabled">
-      <a class="page-link" href="{{ paginator.previous_page_path | relative_url }}">&larr; Older</a>
+      <a class="page-link" href="#">&larr; Newer</a>
     </li>
   {% endif %}
 
@@ -54,11 +55,11 @@ layout: default
 
   {% if paginator.next_page %}
     <li class="page-item">
-      <a class="page-link" href="{{ paginator.next_page_path | relative_url }}">Newer &rarr;</a>
+      <a class="page-link" href="{{ paginator.next_page_path | relative_url }}">Older &rarr;</a>
     </li>
   {% else %}
     <li class="page-item disabled">
-      <a class="page-link" href="{{ paginator.next_page_path | relative_url }}">Newer &rarr;</a>
+      <a class="page-link" href="#">Older &rarr;</a>
     </li>
   {% endif %}
 </ul>

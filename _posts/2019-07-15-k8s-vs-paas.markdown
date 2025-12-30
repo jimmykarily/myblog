@@ -9,9 +9,6 @@ tags: [Kubernetes, PaaS]
 
 ![Raw Vegetables](/images/raw_vegetables.jpg)
 
-# Kubernetes VS PaaS
-_{{ page.description }}_
-
 If you asked me 3 years ago, I would probably define the professional part of myself as a "Rails developer". Back then, most of my new projects started with a proof of concept deployed on a free Heroku account. The reason is simple, that was the fastest way to get my Ruby application live. At the same time it was the cheapest (free right?) so that was a no-brainer.
 
 The last 2.5 years, my work has been mostly on CloudFoundry and Kubernetes. CloudFoundry is an Open Source PaaS solution and Kubernetes is a Container orchestration platform. I work on a project that combines these two ([SUSE CloudFoundry](https://github.com/suse/scf) runs CloudFoundry on top of Kubernetes). There is an argument I've heard more than once regarding running a PaaS on top of Kubernetes and that is: "Why deploy CloudFoundry on top of Kubernetes and not use Kubernetes directly?". Maybe it's my science studies, maybe it's Myth Busters, but I had to test this theory. Thankfully, 2 times a year we get a week to hack on anything we want at SUSE ([Check it out](https://hackweek.suse.com/)) so I got the time I needed a couple of weeks ago.

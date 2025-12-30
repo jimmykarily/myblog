@@ -1,0 +1,23 @@
+---
+layout: default
+---
+
+<!-- Compact Post List -->
+<div class="list-group">
+  {% for post in site.posts %}
+    {% unless post.hidden %}
+      <a href="{{ post.url | relative_url }}" class="list-group-item list-group-item-action" style="position: relative;">
+        {% if post.language == 'gr' or post.language == 'el' %}
+          <span style="position: absolute; bottom: 8px; right: 12px; font-size: 1.2rem;">🇬🇷</span>
+        {% endif %}
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{ post.title }}</h5>
+          <small class="text-muted">{{ post.date | date_to_long_string }}</small>
+        </div>
+        {% if post.description %}
+          <p class="mb-1 text-muted"><small><i>{{ post.description }}</i></small></p>
+        {% endif %}
+      </a>
+    {% endunless %}
+  {% endfor %}
+</div>
