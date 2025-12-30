@@ -2,14 +2,6 @@
 layout: default
 ---
 
-<!-- Posts Header with View Toggle -->
-<div class="d-flex justify-content-between align-items-center my-4">
-  <h1 class="mb-0">Posts</h1>
-  <a href="{{ '/' | relative_url }}" class="btn btn-outline-secondary btn-sm">
-    <i class="fas fa-th-large"></i> Extended View
-  </a>
-</div>
-
 <!-- Compact Post List -->
 <div class="list-group">
   {% for post in site.posts %}
