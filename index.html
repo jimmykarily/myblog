@@ -5,7 +5,13 @@
 layout: default
 ---
 
-<h1 class="my-4">Posts</h1>
+<!-- Posts Header with View Toggle -->
+<div class="d-flex justify-content-between align-items-center my-4">
+  <h1 class="mb-0">Posts</h1>
+  <a href="{{ '/compact.html' | relative_url }}" class="btn btn-outline-secondary btn-sm">
+    <i class="fas fa-list"></i> Compact View
+  </a>
+</div>
 
 {% for post in paginator.posts %}
   <div class="card mb-4">
@@ -32,11 +38,11 @@ layout: default
 <ul class="pagination justify-content-center mb-4">
   {% if paginator.previous_page %}
     <li class="page-item">
-      <a class="page-link" href="{{ paginator.previous_page_path | relative_url }}">&larr; Older</a>
+      <a class="page-link" href="{{ paginator.previous_page_path | relative_url }}">&larr; Newer</a>
     </li>
   {% else %}
     <li class="page-item disabled">
-      <a class="page-link" href="{{ paginator.previous_page_path | relative_url }}">&larr; Older</a>
+      <a class="page-link" href="#">&larr; Newer</a>
     </li>
   {% endif %}
 
@@ -54,11 +60,11 @@ layout: default
 
   {% if paginator.next_page %}
     <li class="page-item">
-      <a class="page-link" href="{{ paginator.next_page_path | relative_url }}">Newer &rarr;</a>
+      <a class="page-link" href="{{ paginator.next_page_path | relative_url }}">Older &rarr;</a>
     </li>
   {% else %}
     <li class="page-item disabled">
-      <a class="page-link" href="{{ paginator.next_page_path | relative_url }}">Newer &rarr;</a>
+      <a class="page-link" href="#">Older &rarr;</a>
     </li>
   {% endif %}
 </ul>
