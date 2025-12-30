@@ -1,15 +1,11 @@
 ---
 layout: default
 title: "Test Ride QJ SVT650X"
-description: Μια βόλτα στην Καρκαλού για δοκιμή
+description: Μικρή βόλτα, εντυπώσεις και συμπεράσματα
 date:   2023-10-07
 tags: [moto, gr]
 language: el
 ---
-
-# Test Ride - QJ SVT650X
-
-_Μικρή βόλτα, εντυπώσεις και συμπεράσματα_
 
 ![svt650x](/images/svt650x-1.jpg)
 

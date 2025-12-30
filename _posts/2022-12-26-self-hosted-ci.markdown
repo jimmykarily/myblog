@@ -6,8 +6,6 @@ date:   2022-12-26
 tags: [kubernetes, woodpecker, drone, CI, codeberg, gitea]
 ---
 
-# Self hosted CI
-
 ## Why
 
 Don't you enjoy how everything is for free these days? You host your code for free, you get [a free CI with computing resources for free](https://github.com/features/actions).

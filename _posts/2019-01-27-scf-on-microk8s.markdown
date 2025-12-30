@@ -1,12 +1,10 @@
 ---
 layout: default
 title: "SUSE Cloud Application Platform on MicroK8s"
-description: A guide on how to setup SUSE Cloud Application Platform on MicroK8s for development or demo
+description: A step by step guide
 date:   2019-01-27
 tags: [microk8s, cloudfoundry, scf, suse, kubernetes]
 ---
-
-# SUSE Cloud Application Platform (CAP) on Microk8s
 
 Unless you've been living under a rock, you probably know what [kubernetes](https://kubernetes.io/) is. If you have been living under a rock (which is nothing to be ashamed of), kubernetes is a production-grade container orchestrator or in simple words a way to use containers in production to deploy applications and services.
 
@@ -23,7 +21,7 @@ MicroK8s run on [Snap](https://snapcraft.io/). To install Snap on openSUSE Tumbl
 ```bash
 $ sudo systemctl start snapd
 $ # Consider enabling the snapd service to automatically start it after reboots
-$ # sudo systemctl enable snapd 
+$ # sudo systemctl enable snapd
 ```
 
 - Add snap bin directory to your path (add this to your bashrc or similar):
@@ -97,7 +95,7 @@ Open the file `/var/snap/microk8s/current/args/docker-daemon.json` and set the c
 }
 ```
 
-Apply the change with: 
+Apply the change with:
 
 ```bash
 $ sudo systemctl restart snap.microk8s.daemon-docker.service

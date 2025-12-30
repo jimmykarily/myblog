@@ -9,8 +9,6 @@ tags: [3D printing, Open Source]
 
 ![DruKit](/images/drumkit.jpg)
 
-# First steps in 3D printing
-
 About a year ago, as part of [SUSE's HackWeek](https://hackweek.suse.com/) I started building my own electronic drum kit. So ambitious was I, that I wanted to create every single part of it, the module included. For those of you who don't know what the drum module is, it's the thing that converts your actions (hits on the drum triggers) to MIDI events and eventually to sound.
 
 I hate to admit that after reading and learning about peak detectors and multiplexers and a lot of other interesting stuff, I ended up buying a used drum module from Alesis for 100 euros after a year cause the project was stalled. 

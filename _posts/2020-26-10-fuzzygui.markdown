@@ -6,8 +6,6 @@ date:   2020-10-26
 tags: [fzf, fuzzy, search]
 ---
 
-# Introducing fuzzygui
-
 Recently I started using the awesome [fzf](https://github.com/junegunn/fzf) tool both from [withing vim](https://github.com/junegunn/fzf.vim) but also for other use cases (e.g. in combination with [pass](https://www.passwordstore.org/)). If you haven't used fuzzy search before, please try that. It will change the way you work for ever.
 
 One simple example on how to use it with pass is the following function (just put it in your `.bashrc`):
