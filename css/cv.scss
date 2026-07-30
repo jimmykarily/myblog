@@ -1,0 +1,263 @@
+---
+---
+
+/* Styles for the CV page only. Loaded when a page sets `cv: true`. */
+
+.cv {
+  /* The rest of the site justifies body text. A CV is mostly short lines and
+     dense lists, where justification opens up large gaps between words. */
+  text-align: left;
+
+  /* The name and contact links duplicate the site header and navigation, so
+     the block is taken out of the visual flow rather than removed: the page
+     keeps its h1 for screen readers and search engines, and printing restores
+     it, since the site chrome does not print. */
+  .cv-head {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #ddd;
+    font-size: 1.6rem;
+  }
+
+  /* The company is the entry's title, so it carries the weight. Bootstrap
+     headings default to 500, which read lighter than the bold role beneath.
+     The rule belongs to the heading rather than sitting between entries as an
+     hr, so it reads as "a new entry starts here". A border is used rather than
+     a background, because browsers drop background graphics when printing by
+     default and the page has to survive being turned into a PDF. */
+  h3 {
+    margin-top: 2.6rem;
+    margin-bottom: 0.2rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.3);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  /* The first entry follows the section heading, which has its own rule */
+  h2 + h3 {
+    margin-top: 0.8rem;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  /* Role first, then the dates on their own line underneath. Muted with
+     opacity rather than a fixed colour, so the dates stay legible on the
+     site's dark theme and still read as secondary when printed on white. */
+  /* Company, then role, then dates, then the company site, each on its own
+     line and each a step quieter than the one above it. */
+  .cv-role {
+    margin-bottom: 0.05rem;
+  }
+
+  /* Whichever of these two ends the block owns the gap before the body text.
+     Not every entry has a company site, so the dates keep the gap and give it
+     up only when a site line follows. Browsers without :has() simply show a
+     slightly wider gap between the dates and the site. */
+  .cv-dates {
+    margin-bottom: 0.9rem;
+    font-size: 0.9rem;
+    opacity: 0.75;
+  }
+
+  .cv-dates:has(+ .cv-site) {
+    margin-bottom: 0.05rem;
+  }
+
+  .cv-site {
+    margin-bottom: 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  ul {
+    padding-left: 1.2rem;
+  }
+
+  li {
+    margin-bottom: 0.4rem;
+  }
+
+  /* Location and the last-updated date live at the very end, so the page opens
+     on the summary rather than on administrative detail. */
+  .cv-updated {
+    margin-top: 2.5rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.35);
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+
+  /* The print button sits on its own line, so nothing wraps around it */
+  .cv-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+  }
+
+  h2:first-of-type {
+    margin-top: 0;
+  }
+}
+
+@media print {
+  /* Chrome and Firefox both keep hyperlinks live when printing to PDF, so
+     there is no need to expand href values into the text. */
+
+  body {
+    padding-top: 0 !important;
+    font-size: 10.5pt;
+    color: #000;
+    background: #fff;
+  }
+
+  .navbar,
+  .cv-actions,
+  footer {
+    display: none !important;
+  }
+
+  .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* Bootstrap gives .row negative side margins that are normally cancelled by
+     the container and column padding. With that padding removed for print,
+     the negative margins push content outside the page box and it gets
+     clipped on the left and overflows on the right. */
+  .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* The column is centred on screen with a Bootstrap offset, which would
+     otherwise indent the whole printed page by its left margin. */
+  #main-content {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  .cv {
+    /* Restore the name and contact links, since the site chrome is not printed */
+    .cv-head {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0 0 14pt 0;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
+    }
+
+    h1 {
+      margin: 0 0 3pt 0;
+      font-size: 20pt;
+    }
+
+    .cv-contact {
+      margin-bottom: 0;
+      font-size: 9pt;
+    }
+
+    h2 {
+      font-size: 13pt;
+      margin-top: 16pt;
+      margin-bottom: 6pt;
+      border-bottom: 1px solid #000;
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 11.5pt;
+      margin-top: 16pt;
+      padding-top: 8pt;
+      border-top: 1px solid #ccc;
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    h2 + h3 {
+      margin-top: 6pt;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    /* Keep a heading with the role, dates and site that belong to it */
+    .cv-role,
+    .cv-dates,
+    .cv-site,
+    h2 + p {
+      break-before: avoid;
+      page-break-before: avoid;
+    }
+
+    h3 {
+      font-weight: 700;
+    }
+
+    .cv-role {
+      margin-bottom: 0;
+    }
+
+    .cv-dates,
+    .cv-site {
+      font-size: 9pt;
+      margin-bottom: 7pt;
+    }
+
+    .cv-dates:has(+ .cv-site) {
+      margin-bottom: 0;
+    }
+
+    li {
+      margin-bottom: 2pt;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    /* On paper the muting can be a real grey again */
+    .cv-dates,
+    .cv-contact,
+    .cv-updated {
+      opacity: 1;
+      color: #444;
+    }
+
+    .cv-updated {
+      margin-top: 14pt;
+      padding-top: 5pt;
+      border-top: 1px solid #ccc;
+      font-size: 8.5pt;
+    }
+  }
+}
+
+/* Without an explicit size the output depends on the browser's locale
+   defaults, which can produce A3 or Letter unpredictably. */
+@page {
+  size: A4;
+  margin: 1.4cm;
+}

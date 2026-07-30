@@ -27,7 +27,10 @@
             </li>
             {% endif %}
             <li class="nav-item">
-              <a class="nav-link" href="https://www.linkedin.com/in/jimmykarily/">
+              <a class="nav-link" href="{{ '/cv/' | relative_url }}">CV</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://www.linkedin.com/in/dkarakasilis/">
                 <i class="fab fa-linkedin"></i>
               </a>
             </li>
@@ -49,8 +52,9 @@
     <!-- Page Content -->
     <div class="container">
       <div class="row">
-        <!-- Blog Entries Column -->
-        <div class="col-md-8 text-justify" id="main-content">
+        <!-- Blog Entries Column. The CV page has no sidebar, so the column is
+             centred instead of leaving an empty gutter beside it. -->
+        <div class="{% if page.cv %}col-md-8 offset-md-2{% else %}col-md-8{% endif %} text-justify" id="main-content">
           <!-- checking page.date to make sure this is a blog post -->
           {% if page.date %}
             {% if page.title %}
@@ -63,8 +67,11 @@
           {{ content }}
         </div>
 
-        <!-- Sidebar Widgets Column -->
+        <!-- Sidebar Widgets Column. The Short CV widget would only repeat the
+             CV page, so it is left out there. -->
+        {% unless page.cv %}
         {% include sidebar.html %}
+        {% endunless %}
       </div>
       <!-- /.row -->
 
